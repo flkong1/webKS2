@@ -4,14 +4,24 @@ import bodyParser from 'koa-bodyparser';
 import { protectedRouter, unprotectedRouter } from './routes';
 import { JWT_SECRET } from './constants';
 import logger from './logger';
+import sessionConfig from './config/session';
 import { createConnection } from 'typeorm';
 import jwt from 'koa-jwt';
+import koaSession from 'koa-session';
 import 'reflect-metadata';
+
+// 配合 signed 属性的签名key
+const session_signed_key = ['appletSystem'];
 
 createConnection()
   .then(() => {
     // 初始化 Koa 应用实例
     const app = new Koa();
+
+    // session 实例化
+    const session = koaSession(sessionConfig, app);
+    app.keys = session_signed_key;
+    app.use(session);
 
     // 注册中间件
     app.use(logger());

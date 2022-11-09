@@ -7,7 +7,9 @@ import UserController from './controllers/User';
 const unprotectedRouter = new Router();
 
 // auth 相关的路由
+unprotectedRouter.post('/auth/login/user', AuthController.loginUser);
 unprotectedRouter.post('/auth/login', AuthController.login);
+unprotectedRouter.get('/auth/login/yzm', AuthController.loginYzm);
 unprotectedRouter.post('/auth/register', AuthController.register);
 
 const protectedRouter = new Router();
