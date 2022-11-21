@@ -9,6 +9,10 @@ import { UnauthorizedException } from '../exceptions';
 
 export default class AuthController {
   public static async forgotPass(ctx: Context) {
+    // reset密码（操作mysql via typeorm)
+    const userRepository = getManager().getRepository(User);
+
+    // success -> return 1
     ctx.status = 200;
     console.log(ctx);
   }
@@ -58,6 +62,13 @@ export default class AuthController {
       };
       throw new UnauthorizedException('密码错误');
     }
+  }
+
+  public static async logout(ctx: Context) {
+    ctx.status = 200;
+    ctx.body = {
+      code: 200,
+    };
   }
 
   public static async login(ctx: Context) {
