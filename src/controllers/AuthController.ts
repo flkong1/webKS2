@@ -7,12 +7,8 @@ import { User } from '../entity/user';
 import { JWT_SECRET } from '../constants';
 import { UnauthorizedException } from '../exceptions';
 
-
-
 export default class AuthController {
-  public static async forgotPass(ctx: Context){
-
-
+  public static async forgotPass(ctx: Context) {
     ctx.status = 200;
     console.log(ctx);
   }
@@ -51,7 +47,7 @@ export default class AuthController {
       // 一致则通过 jwt.sign 签发 Token
       // Token 负载就是标识用户 ID 的对象, 这样后面鉴权成功后就可以通过 ctx.user.id 来获取用户 ID
       ctx.body = {
-        code: 3,
+        code: 1,
         datas: {
           token: jwt.sign({ id: user.id }, JWT_SECRET),
         },
@@ -116,5 +112,4 @@ export default class AuthController {
     ctx.status = 201;
     ctx.body = user;
   }
- 
 }
