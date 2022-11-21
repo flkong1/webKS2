@@ -7,7 +7,15 @@ import { User } from '../entity/user';
 import { JWT_SECRET } from '../constants';
 import { UnauthorizedException } from '../exceptions';
 
+
+
 export default class AuthController {
+  public static async forgotPass(ctx: Context){
+
+
+    ctx.status = 200;
+    console.log(ctx);
+  }
   public static async loginYzm(ctx: Context) {
     let captcha = svgCaptcha.create({
       inverse: false, //翻转颜色
@@ -43,7 +51,7 @@ export default class AuthController {
       // 一致则通过 jwt.sign 签发 Token
       // Token 负载就是标识用户 ID 的对象, 这样后面鉴权成功后就可以通过 ctx.user.id 来获取用户 ID
       ctx.body = {
-        code: 1,
+        code: 3,
         datas: {
           token: jwt.sign({ id: user.id }, JWT_SECRET),
         },
@@ -93,4 +101,20 @@ export default class AuthController {
     ctx.status = 201;
     ctx.body = user;
   }
+
+  public static async change(ctx: Context) {
+    const userRepository = getManager().getRepository(User);
+
+    const newUser = new User();
+    newUser.name = ctx.request.body.name;
+    newUser.email = ctx.request.body.email;
+    newUser.password = await argon2.hash(ctx.request.body.password);
+
+    // 保存到数据库
+    const user = await userRepository.save(newUser);
+
+    ctx.status = 201;
+    ctx.body = user;
+  }
+ 
 }
