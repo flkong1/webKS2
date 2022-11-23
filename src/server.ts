@@ -8,6 +8,7 @@ import sessionConfig from './config/session';
 import { createConnection } from 'typeorm';
 import jwt from 'koa-jwt';
 import koaSession from 'koa-session';
+import koaBody from 'koa-body';
 import 'reflect-metadata';
 
 // 配合 signed 属性的签名key

@@ -1,3 +1,4 @@
+// 用户表
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -13,4 +14,7 @@ export class User {
 
   @Column()
   email: string;
+
+  @Column()
+  type: string;
 }
