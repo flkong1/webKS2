@@ -53,7 +53,7 @@ export default class AuthController {
       ctx.body = {
         code: 1,
         datas: {
-          token: jwt.sign({ id: user.id }, JWT_SECRET),
+          token: jwt.sign({ id: user.name }, JWT_SECRET),
         },
       };
     } else {
@@ -85,7 +85,7 @@ export default class AuthController {
       ctx.body = {
         code: 1,
         datas: {
-          token: jwt.sign({ id: user.id }, JWT_SECRET),
+          token: jwt.sign({ id: user.name }, JWT_SECRET),
           perm: '2',
         },
       };
@@ -121,7 +121,7 @@ export default class AuthController {
       ctx.status = 200;
       // 一致则通过 jwt.sign 签发 Token
       // Token 负载就是标识用户 ID 的对象, 这样后面鉴权成功后就可以通过 ctx.user.id 来获取用户 ID
-      ctx.body = { token: jwt.sign({ id: user.id }, JWT_SECRET) };
+      ctx.body = { token: jwt.sign({ id: user.name }, JWT_SECRET) };
     } else {
       throw new UnauthorizedException('密码错误');
     }

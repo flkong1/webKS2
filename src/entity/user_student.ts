@@ -1,14 +1,19 @@
 // 学生表
-import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { User } from './user';
+import { Social_Prc } from './social_prc';
+import { Achievement } from './achievement';
+import { Extracurricular } from './extracurricular';
 
 @Entity()
 export class User_Student {
   @PrimaryColumn()
-  studentNo: string;
+  studentNo: number;
 
-  // @OneToOne(() => User)
-  // @JoinColumn()
+  @OneToOne(() => User)
+  @JoinColumn({name: 'userNo'})
+  user: User;
+  
   @Column()
   name: string;
 

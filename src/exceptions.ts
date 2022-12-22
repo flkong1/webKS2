@@ -14,6 +14,14 @@ export class NotFoundException extends BaseException {
   }
 }
 
+export class AlreadyExistsException extends BaseException{
+  status: 405;
+  constructor(msg?: string) {
+    super();
+    this.message = msg || '用户已存在';
+  }
+}
+
 export class UnauthorizedException extends BaseException {
   status = 401;
 
