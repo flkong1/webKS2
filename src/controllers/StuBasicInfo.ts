@@ -12,15 +12,21 @@ import { Department } from '../entity/department';
 export default class StuBasicInfoController {
   //管理员端展示所有人的信息
     public static async listStuBasicInfo(ctx: Context) {
+      // if(ctx.cookies.get('token')){
+      //   console.log(ctx.cookies.get('token'))
+
+      // }else{
+      //   console.log('没有cookie')
+      // }
+      
+      // await Auth.Verify(ctx);
+      // console.log(ctx.state.user)
         const stuBasicInfoRepository = getManager().getRepository(User_Student);
-        console.log(ctx.request.body)
-        // console.log(ctx.request.body.grade)
         const stuBasicInfo = await stuBasicInfoRepository.findBy({ department: ctx.request.body.dpt, grade: ctx.request.body.grade});
         // const stuBasicInfo = await stuBasicInfoRepository.findBy({ department: ctx.request.body.dpt});
     
         ctx.status = 200;
         ctx.body = {
-          status: 200,
           code: 1,
           datas: {
             stuBasicInfo,
@@ -31,11 +37,13 @@ export default class StuBasicInfoController {
       }
   //用户端展示自己的信息(需要在url中传入studentNo或user)
       public static async showStuBasicInfoDetail(ctx: Context) {
+        console.log('entered')
         await Auth.Verify(ctx);
         const stuBasicInfoRepository = getManager().getRepository(User_Student);
         console.log(ctx.state.user.id)
 
        const stu = await stuBasicInfoRepository.findOneBy({ studentNo: ctx.state.user.id });
+       console.log(stu);
 
     
         if (stu) {
@@ -73,7 +81,7 @@ export default class StuBasicInfoController {
           newStu.user = ctx.request.body.studentNo;       //外键有点问题
           newStu.studentNo = ctx.request.body.studentNo;
           newStu.name = ctx.request.body.name;
-          // newStu.grade = ctx.request.body.grade;
+          newStu.grade = ctx.request.body.grade;
           newStu.gender = ctx.request.body.gender;
           newStu.graduateSchool = ctx.request.body.graduateSchool;
           newStu.birthDate = ctx.request.body.birthDate;
@@ -138,13 +146,12 @@ export default class StuBasicInfoController {
           // console.log(stu)
           ctx.status = 200;
           ctx.body = {
-            status: 200,
             code: 1,
           };
           console.log('基本信息删除成功');
         } else {
+          ctx.status = 200;
           ctx.body = {
-            status: 200,
             code: -1,
             msg: '用户不存在'
           };

@@ -104,13 +104,5 @@ export default class SocialPrcController {
         console.log('社会实践信息修改成功');
 
     }
-
-
-
-
-
-
-    
-  
    
 }

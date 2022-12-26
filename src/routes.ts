@@ -8,6 +8,8 @@ import DeptController from './controllers/Dept';
 import SocialPrcController from './controllers/SocialPrcController';
 import StuBasicInfoController from './controllers/StuBasicInfo';
 import ExtraCurricularController from './controllers/ExtraCurricularController';
+import { Achievement } from './entity/achievement';
+import AchievementController from './controllers/AchievementController';
 
 const unprotectedRouter = new Router();
 
@@ -46,13 +48,18 @@ unprotectedRouter.post('/social_prc/update',SocialPrcController.updateSocialPrc)
 unprotectedRouter.post('/social_prc/delete',SocialPrcController.deleteSocialPrc);
 
 //课外活动
-// unprotectedRouter.post('/extraCurricular/list/getInfoTable', ExtraCurricularController.listExCurricular);
-// unprotectedRouter.post('/extraCurricular/list/getInfo',ExtraCurricularController.showExCurricularDetail);
-// unprotectedRouter.post('/extraCurricular/add',ExtraCurricularController.addExCurricular);
-// unprotectedRouter.post('/extraCurricular/update',ExtraCurricularController.updateExCurricular);
-// unprotectedRouter.post('/extraCurricular/delete',ExtraCurricularController.deleteExCurricular);
+unprotectedRouter.post('/extraCurricular/list/getInfoTable', ExtraCurricularController.listExCurricular);
+unprotectedRouter.post('/extraCurricular/list/getInfo',ExtraCurricularController.showExCurricularDetail);
+unprotectedRouter.post('/extraCurricular/add',ExtraCurricularController.addExCurricular);
+unprotectedRouter.post('/extraCurricular/update',ExtraCurricularController.updateExCurricular);
+unprotectedRouter.post('/extraCurricular/delete',ExtraCurricularController.deleteExCurricular);
 
 //成果奖励
+unprotectedRouter.post('/achievement/list/getInfoTable', AchievementController.listAchieve);
+unprotectedRouter.post('/achievement/list/getInfo',AchievementController.showAchieveDetail);
+unprotectedRouter.post('/achievement/add',AchievementController.addAchieve);
+unprotectedRouter.post('/achievement/update',AchievementController.updateAchieve);
+unprotectedRouter.post('/achievement/delete',AchievementController.deleteAchieve);
 
 
 export { protectedRouter, unprotectedRouter };
