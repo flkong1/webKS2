@@ -1,13 +1,21 @@
 //课外活动表
-import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn,ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn,ManyToOne } from 'typeorm';
 import { User } from './user';
 
 @Entity()
 export class Extracurricular {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   actNo: number;
 
-  @ManyToOne(() => User, user => user.extracurriculars)
+  @Column()
+  studentNo: number;
+
+  @Column()
+  stuName: string;
+
+  @ManyToOne(() => User, user => user.extracurriculars, {
+    cascade: true,
+  })
   @JoinColumn({ name: 'userNo' })
   user: User;
 

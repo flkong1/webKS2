@@ -1,11 +1,8 @@
 import { Context } from 'koa';
 import { getManager } from 'typeorm';
-import { UnauthorizedException } from '../exceptions';
-import jwt from 'jsonwebtoken';
-import svgCaptcha from 'svg-captcha';
 import { Social_Prc } from '../entity/social_prc';
-import { JWT_SECRET } from '../constants';
-import { NotFoundException, ForbiddenException } from '../exceptions'
+import { NotFoundException, ForbiddenException, UnauthorizedException } from '../exceptions'
+import Auth from '../authMiddleware/auth';
 
 export default class SocialPrcController {
 
@@ -25,10 +22,11 @@ export default class SocialPrcController {
         };
     }
 
-    //展示某某个人社会实践信息
+    //学生端展示某个人社会实践信息
     public static async showSocialPrcDetail(ctx: Context) {
+      await Auth.Verify(ctx);
       const socialPrcRepository = getManager().getRepository(Social_Prc);
-      const socialPrc = await socialPrcRepository.findBy({ user: ctx.request.body.studentNo });
+      const socialPrc = await socialPrcRepository.findBy({ studentNo: +ctx.state.user.id });
   
       if (socialPrc) {
         ctx.status = 200;
@@ -52,20 +50,19 @@ export default class SocialPrcController {
 
       const newPrc = new Social_Prc();
       newPrc.stuName = ctx.request.body.stuName;
-      newPrc.user = ctx.request.body.user;
+      newPrc.studentNo = ctx.request.body.studentNo;
+      newPrc.user = ctx.request.body.studentNo;
       newPrc.date = ctx.request.body.date;
       newPrc.title = ctx.request.body.title;
       newPrc.content = ctx.request.body.content;
       newPrc.result = ctx.request.body.result;
 
+      const prc = await socialPrcRepository.save(newPrc);
       console.log('社会实践经历添加成功')
 
-      const prc = await socialPrcRepository.save(newPrc);
-
-      ctx.status = 201;
+      ctx.status = 200;
       ctx.body = {
         code: 1,
-        // datas: nstu,
       };
       
 
@@ -74,36 +71,44 @@ export default class SocialPrcController {
     public static async deleteSocialPrc(ctx: Context) {
         
       const socialPrcRepository = getManager().getRepository(Social_Prc);
-      await socialPrcRepository.delete(ctx.request.body.prcNo);
+      await socialPrcRepository.delete({stuName: ctx.request.body.stuName, title: ctx.request.body.title});
   
-      ctx.status = 204;
+      ctx.status = 200;
       ctx.body = {
-        status: 204,
+        status: 200,
         code: 1,
       };
       console.log('社会实践信息删除成功');
     }
 
+    public static async updateSocialPrc(ctx: Context) {
+    
+      const socialPrcRepository = getManager().getRepository(Social_Prc);
+      //根据学生姓名跟社会实践名称唯一确定一条信息
+        await socialPrcRepository.update({ stuName: ctx.request.body.stuName, title: ctx.request.body.title}, ctx.request.body);
+        const socialPrc = await socialPrcRepository.findOneBy({ stuName: ctx.request.body.stuName, title: ctx.request.body.title});
+    
+        if (socialPrc) {
+          ctx.status = 200;
+          ctx.body = {
+            code: 1,
+            
+          };
+        } else {
+          ctx.status = 200;
+          ctx.body = {
+            code: -1,
+            msg: '更新失败'
+          };
+        }
+        console.log('社会实践信息修改成功');
 
-    //用studentNo外键查找？
-    // public static async updateSocialPrc(ctx: Context) {
-    //   const userId = +ctx.params.id;
-    //   // 鉴权逻辑
-    //   if (userId !== +ctx.state.user.id) {
-    //     throw new ForbiddenException();
-    //   }
-  
-    //   const userRepository = getManager().getRepository(User);
-    //   await userRepository.update(+ctx.params.id, ctx.request.body);
-    //   const updatedUser = await userRepository.findOneBy({ id: +ctx.params.id });
-  
-    //   if (updatedUser) {
-    //     ctx.status = 200;
-    //     ctx.body = updatedUser;
-    //   } else {
-    //     ctx.status = 404;
-    //   }
-    // }
+    }
+
+
+
+
+
 
     
   

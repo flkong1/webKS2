@@ -7,12 +7,12 @@ import StudentAdminController from './controllers/StudentAdmin';
 import DeptController from './controllers/Dept';
 import SocialPrcController from './controllers/SocialPrcController';
 import StuBasicInfoController from './controllers/StuBasicInfo';
+import ExtraCurricularController from './controllers/ExtraCurricularController';
+
 const unprotectedRouter = new Router();
 
 unprotectedRouter.post('/auth/login/user', AuthController.loginUser);
-unprotectedRouter.post('/auth/login/admin', AuthController.loginAdmin);
 unprotectedRouter.post('/auth/login/logout', AuthController.logout);
-unprotectedRouter.post('/auth/login', AuthController.login);
 unprotectedRouter.get('/auth/login/yzm', AuthController.loginYzm);
 unprotectedRouter.post('/auth/login/forgot', AuthController.forgotPass);
 unprotectedRouter.post('/auth/register', AuthController.register);
@@ -33,15 +33,26 @@ unprotectedRouter.patch('/pwd/changePwd/:name',UserController.changePwd);
 
 //基本信息
 unprotectedRouter.post('/stuBasicInfo/getInfoTable', StuBasicInfoController.listStuBasicInfo);
-unprotectedRouter.get('/stuBasicInfo/getInfo',StuBasicInfoController.showStuBasicInfoDetail);
+unprotectedRouter.post('/stuBasicInfo/getInfo',StuBasicInfoController.showStuBasicInfoDetail);
 unprotectedRouter.post('/stuBasicInfo/add',StuBasicInfoController.addStuBasicInfo);
 unprotectedRouter.post('/stuBasicInfo/update',StuBasicInfoController.updateStuBasicInfo);
 unprotectedRouter.post('/stuBasicInfo/delete',StuBasicInfoController.deleteStuBasicInfo);
 
 //社会实践 
-unprotectedRouter.get('/social_prc/list', SocialPrcController.listSocialPrc);
-unprotectedRouter.post('/social_prc/list',SocialPrcController.showSocialPrcDetail);
+unprotectedRouter.post('/social_prc/list/getInfoTable', SocialPrcController.listSocialPrc);
+unprotectedRouter.post('/social_prc/list/getInfo',SocialPrcController.showSocialPrcDetail);
 unprotectedRouter.post('/social_prc/add',SocialPrcController.addSocialPrc);
-unprotectedRouter.delete('/social_prc/delete/:prcNo',SocialPrcController.deleteSocialPrc);
+unprotectedRouter.post('/social_prc/update',SocialPrcController.updateSocialPrc);
+unprotectedRouter.post('/social_prc/delete',SocialPrcController.deleteSocialPrc);
+
+//课外活动
+// unprotectedRouter.post('/extraCurricular/list/getInfoTable', ExtraCurricularController.listExCurricular);
+// unprotectedRouter.post('/extraCurricular/list/getInfo',ExtraCurricularController.showExCurricularDetail);
+// unprotectedRouter.post('/extraCurricular/add',ExtraCurricularController.addExCurricular);
+// unprotectedRouter.post('/extraCurricular/update',ExtraCurricularController.updateExCurricular);
+// unprotectedRouter.post('/extraCurricular/delete',ExtraCurricularController.deleteExCurricular);
+
+//成果奖励
+
 
 export { protectedRouter, unprotectedRouter };

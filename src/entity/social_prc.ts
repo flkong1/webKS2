@@ -7,9 +7,15 @@ export class Social_Prc {
   @PrimaryGeneratedColumn()
   prcNo: number;
 
-  @ManyToOne(() => User, user => user.social_prcs)
+  @ManyToOne(() => User, user => user.social_prcs, {
+    cascade: true,
+  })
   @JoinColumn({ name: 'userNo' })
   user: User;
+
+
+  @Column()
+  studentNo: number;
 
   @Column()
   stuName: string;

@@ -7,7 +7,15 @@ export class Achievement {
   @PrimaryColumn()
   achieveNo: number;
 
-  @ManyToOne(() => User, user => user.achievements)
+  @Column()
+  studentNo: number;
+
+  @Column()
+  stuName: string;
+
+  @ManyToOne(() => User, user => user.achievements, {
+    cascade: true,
+  })
   @JoinColumn({ name: 'userNo' })
   user: User;
 

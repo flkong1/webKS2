@@ -20,7 +20,7 @@ export default class StudentAdminController {
     newStudent.graduateSchool = ctx.request.body.graduateSchool;
     newStudent.birthDate = ctx.request.body.birthDate;
     newStudent.identityNum = ctx.request.body.identityNum;
-    newStudent.politicalAppearence = ctx.request.body.politicalAppearence;
+    newStudent.politicalAppearance = ctx.request.body.politicalAppearence;
     newStudent.phoneNum = ctx.request.body.phoneNum;
     newStudent.department = ctx.request.body.department;
     newStudent.class = ctx.request.body.class;
