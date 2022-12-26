@@ -1,4 +1,4 @@
-// 课程表
+// 学院表
 import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity()

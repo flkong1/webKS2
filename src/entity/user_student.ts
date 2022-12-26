@@ -10,7 +10,9 @@ export class User_Student {
   @PrimaryColumn()
   studentNo: number;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User,{
+    cascade: true,    //外键对应的数据被删除，这条数据也会被删除
+  })
   @JoinColumn({name: 'userNo'})
   user: User;
   
@@ -19,6 +21,9 @@ export class User_Student {
 
   @Column()
   gender: string;
+
+  @Column()
+  grade: string;
 
   @Column()
   graduateSchool: string;
@@ -30,7 +35,7 @@ export class User_Student {
   identityNum: string;
 
   @Column()
-  politicalAppearence: string;
+  politicalAppearance: string;
 
   @Column()
   phoneNum: string;

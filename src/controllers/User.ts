@@ -1,7 +1,7 @@
 import { Context } from 'koa';
 import { getConnection, getManager } from 'typeorm';
 import * as argon2 from 'argon2';
-import { UnauthorizedException } from '../exceptions';
+import { AlreadyExistsException, UnauthorizedException } from '../exceptions';
 import jwt from 'jsonwebtoken';
 import svgCaptcha from 'svg-captcha';
 import { User } from '../entity/user';
@@ -30,9 +30,40 @@ export default class UserController {
     }
   }
 
+  //增加用户
+        //管理员端增加用户基本信息
+      // public static async addUser(ctx: Context) {
+      //   const stuBasicInfoRepository = getManager().getRepository(User);
+      //   const stu = await stuBasicInfoRepository.findOneBy({ name: ctx.request.body.name });
+      //   if(stu){
+      //     throw new AlreadyExistsException();
+
+      //   }else{
+      //     const newStu = new User();
+      //     ctx.request.body.password = await argon2.hash(ctx.request.body.password);
+      //     newStu.name = ctx.request.body.name;
+      //     newStu.password = ctx.request.body.password;
+      //     newStu.email = ctx.request.body.email;
+        
+      //     console.log('基本信息添加成功')
+  
+      //     const nstu = await stuBasicInfoRepository.save(newStu);
+  
+      //     ctx.status = 201;
+      //     ctx.body = nstu;
+
+      //   }
+  
+      //   //检验数据库中是否有这个人
+
+        
+        
+  
+      // }
+
   public static async updateUser(ctx: Context) {
     const userId = +ctx.params.name;
-    await Auth.Verify(ctx)
+    await Auth.Verify(ctx);
 
     // 鉴权逻辑
     if (userId !== +ctx.state.user.id) {

@@ -9,7 +9,9 @@ import { ForbiddenException } from '../exceptions';
 
 export default class StudentAdminController {
   public static async insertStudent(ctx: Context) {
+    console.log('001')
     console.log(ctx.request.body);
+
     const userStudentRepository = getManager().getRepository(User_Student);
     const newStudent = new User_Student();
     newStudent.studentNo = ctx.request.body.studentNo;
@@ -24,6 +26,8 @@ export default class StudentAdminController {
     newStudent.class = ctx.request.body.class;
     newStudent.status = ctx.request.body.status;
     const student = await userStudentRepository.insert(newStudent);
+    console.log('student')
+    console.log(student)
     ctx.status = 200;
     ctx.body = {
       status: 20,

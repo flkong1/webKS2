@@ -16,26 +16,39 @@ export default class SocialPrcController {
       const social_prcs = await socialPrcRepository.find();
   
       ctx.status = 200;
-      ctx.body = social_prcs;
+      ctx.body = {
+          status: 20,
+          code: 1,
+          datas: {
+            social_prcs,
+          }
+        };
     }
 
-    //展示某条信息
+    //展示某某个人社会实践信息
     public static async showSocialPrcDetail(ctx: Context) {
       const socialPrcRepository = getManager().getRepository(Social_Prc);
-      const socialPrc = await socialPrcRepository.findOneBy({ prcNo: +ctx.params.name });
+      const socialPrc = await socialPrcRepository.findBy({ user: ctx.request.body.studentNo });
   
       if (socialPrc) {
         ctx.status = 200;
-        ctx.body = socialPrc;
+        ctx.body = {
+          code: 1,
+          datas: socialPrc,
+        };
+        // ctx.body = socialPrc;
       } else {
+        ctx.status = 200;
+          ctx.body = {
+            code: -1,
+            msg:'用户不存在',
+          }
         throw new NotFoundException();
       }
     }
 
     public static async addSocialPrc(ctx: Context) {
       const socialPrcRepository = getManager().getRepository(Social_Prc);
-
-      //检验数据库中是否有这个人
 
       const newPrc = new Social_Prc();
       newPrc.stuName = ctx.request.body.stuName;
@@ -50,7 +63,10 @@ export default class SocialPrcController {
       const prc = await socialPrcRepository.save(newPrc);
 
       ctx.status = 201;
-      ctx.body = prc;
+      ctx.body = {
+        code: 1,
+        // datas: nstu,
+      };
       
 
     }
@@ -58,9 +74,13 @@ export default class SocialPrcController {
     public static async deleteSocialPrc(ctx: Context) {
         
       const socialPrcRepository = getManager().getRepository(Social_Prc);
-      await socialPrcRepository.delete(+ctx.params.prcNo);
+      await socialPrcRepository.delete(ctx.request.body.prcNo);
   
       ctx.status = 204;
+      ctx.body = {
+        status: 204,
+        code: 1,
+      };
       console.log('社会实践信息删除成功');
     }
 

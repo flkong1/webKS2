@@ -16,31 +16,32 @@ unprotectedRouter.post('/auth/login', AuthController.login);
 unprotectedRouter.get('/auth/login/yzm', AuthController.loginYzm);
 unprotectedRouter.post('/auth/login/forgot', AuthController.forgotPass);
 unprotectedRouter.post('/auth/register', AuthController.register);
-unprotectedRouter.post('/stuAdmin/insertStudent', StudentAdminController.insertStudent);
+// unprotectedRouter.post('/stuAdmin/insertStudent', StudentAdminController.insertStudent);
 unprotectedRouter.get('/dpt/getDptName', DeptController.getDeptName);
-unprotectedRouter.get('stuAdmin/getStuData', StudentAdminController.getStuData);
+// unprotectedRouter.get('stuAdmin/getStuData', StudentAdminController.getStuData);
 
 const protectedRouter = new Router();
 
 //跟账号相关
-protectedRouter.get('/users', UserController.listUsers);
-protectedRouter.get('/users/:name', UserController.showUserDetail);
-protectedRouter.put('/users/:name', UserController.updateUser);
-protectedRouter.delete('/users/:name', UserController.deleteUser);
+unprotectedRouter.get('/users', UserController.listUsers);
+unprotectedRouter.get('/users/:name', UserController.showUserDetail);
+unprotectedRouter.post('/users/add',AuthController.register)
+unprotectedRouter.put('/users/:name', UserController.updateUser);
+unprotectedRouter.delete('/users/:name', UserController.deleteUser);
 // protectedRouter.post('/stuAdmin/insertStudent', StudentAdminController.insertStudent);
 unprotectedRouter.patch('/pwd/changePwd/:name',UserController.changePwd);
 
 //基本信息
-protectedRouter.get('/stuBasicInfo/list', StuBasicInfoController.listStuBasicInfo);
-protectedRouter.get('/stuBasicInfo/list/:studentNo',StuBasicInfoController.showStuBasicInfoDetail);
-protectedRouter.post('/stuBasicInfo/add',StuBasicInfoController.addStuBasicInfo);
-protectedRouter.put('/stuBasicInfo/update/:studentNo',StuBasicInfoController.updateStuBasicInfo);
-protectedRouter.delete('/stuBasicInfo/delete/:studentNo',StuBasicInfoController.deleteStuBasicInfo);
+unprotectedRouter.post('/stuBasicInfo/getInfoTable', StuBasicInfoController.listStuBasicInfo);
+unprotectedRouter.get('/stuBasicInfo/getInfo',StuBasicInfoController.showStuBasicInfoDetail);
+unprotectedRouter.post('/stuBasicInfo/add',StuBasicInfoController.addStuBasicInfo);
+unprotectedRouter.post('/stuBasicInfo/update',StuBasicInfoController.updateStuBasicInfo);
+unprotectedRouter.post('/stuBasicInfo/delete',StuBasicInfoController.deleteStuBasicInfo);
 
 //社会实践 
-protectedRouter.get('/social_prc/list', SocialPrcController.listSocialPrc);
-protectedRouter.post('/social_prc/list/:name',SocialPrcController.showSocialPrcDetail);
-protectedRouter.post('/social_prc/add',SocialPrcController.addSocialPrc);
-protectedRouter.delete('/social_prc/delete/:prcNo',SocialPrcController.deleteSocialPrc);
+unprotectedRouter.get('/social_prc/list', SocialPrcController.listSocialPrc);
+unprotectedRouter.post('/social_prc/list',SocialPrcController.showSocialPrcDetail);
+unprotectedRouter.post('/social_prc/add',SocialPrcController.addSocialPrc);
+unprotectedRouter.delete('/social_prc/delete/:prcNo',SocialPrcController.deleteSocialPrc);
 
 export { protectedRouter, unprotectedRouter };
