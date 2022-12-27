@@ -14,10 +14,17 @@ export class Extracurricular {
   stuName: string;
 
   @ManyToOne(() => User, user => user.extracurriculars, {
-    cascade: true,
+    // cascade: true,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'userNo' })
   user: User;
+
+  @Column()
+  department: string;
+
+  @Column()
+  grade: string;
 
   @Column()
   date: string;

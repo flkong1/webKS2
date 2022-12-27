@@ -8,7 +8,8 @@ export class Social_Prc {
   prcNo: number;
 
   @ManyToOne(() => User, user => user.social_prcs, {
-    cascade: true,
+    // cascade: true,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'userNo' })
   user: User;
@@ -19,6 +20,12 @@ export class Social_Prc {
 
   @Column()
   stuName: string;
+
+  @Column()
+  grade: string;
+
+  @Column()
+  department: string;
 
   @Column()
   date: string;

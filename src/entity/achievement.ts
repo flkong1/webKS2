@@ -14,10 +14,17 @@ export class Achievement {
   stuName: string;
 
   @ManyToOne(() => User, user => user.achievements, {
-    cascade: true,
+    onDelete: 'CASCADE',
+    // cascade: true,
   })
   @JoinColumn({ name: 'userNo' })
   user: User;
+
+  @Column()
+  grade: string;
+
+  @Column()
+  department: string;
 
   @Column()
   date: string;

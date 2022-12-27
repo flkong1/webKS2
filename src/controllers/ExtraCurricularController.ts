@@ -41,7 +41,6 @@ export default class ExtraCurricularController {
               code: -1,
               msg:'用户不存在',
             }
-          throw new NotFoundException();
         }
       }
   
@@ -52,6 +51,8 @@ export default class ExtraCurricularController {
         newCur.stuName = ctx.request.body.stuName;
         newCur.user = ctx.request.body.studentNo;
         newCur.studentNo = ctx.request.body.studentNo;
+        newCur.department = ctx.request.body.department;
+        newCur.grade = ctx.request.body.grade;
         newCur.date = ctx.request.body.date;
         newCur.title = ctx.request.body.title;
         newCur.content = ctx.request.body.content;

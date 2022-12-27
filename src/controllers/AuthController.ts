@@ -51,7 +51,12 @@ export default class AuthController {
       }
       
       else{
-        throw new UnauthorizedException('用户名不合法');
+        // throw new UnauthorizedException('用户名不合法');
+        // ctx.status = 200;
+            ctx.body = {
+              code: -1,
+              msg: '用户名不合法'
+            };
       }}
       catch (error) {
         console.error(error);}
@@ -63,7 +68,11 @@ export default class AuthController {
       .getOne();
 
     if (!user) {
-      throw new UnauthorizedException('用户名不存在');
+      // throw new UnauthorizedException('用户名不存在');
+      ctx.body = {
+        code: -1,
+        msg: '用户名不存在'
+      };
     } else if (await argon2.verify(user.password, ctx.request.body.password)) {
       // 用户名存在的话通过 argon2.verify 来验证请求体中的明文密码 password 和数据库中存储的加密密码是否一致
       ctx.status = 200;
@@ -76,9 +85,10 @@ export default class AuthController {
       };
     } else {
       ctx.body = {
-        msg: '密码错误',
+        code: -1,
+        msg: '密码错误'
       };
-      throw new UnauthorizedException('密码错误');
+      // throw new UnauthorizedException('密码错误');
     }
   }
 

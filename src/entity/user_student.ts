@@ -11,7 +11,8 @@ export class User_Student {
   studentNo: number;
 
   @OneToOne(() => User,{
-    cascade: true,    //外键对应的数据被删除，这条数据也会被删除
+    onDelete: 'CASCADE',
+    // cascade: true,    //外键对应的数据被删除，这条数据也会被删除
   })
   @JoinColumn({name: 'userNo'})
   user: User;

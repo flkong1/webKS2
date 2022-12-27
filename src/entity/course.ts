@@ -10,14 +10,18 @@ export class Course {
   courseName: string;
 
   @Column()
+  teacheName: string;
+
+  @Column()
   credit: number;
 
+  //学时
   @Column()
   overallHour: number;
 
-  @Column()
-  courseType: string;
+  // @Column()
+  // courseType: string;
 
-  @Column()
-  department: string;
+  // @Column()
+  // department: string;
 }

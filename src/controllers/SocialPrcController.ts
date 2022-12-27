@@ -14,7 +14,7 @@ export default class SocialPrcController {
   
       ctx.status = 200;
       ctx.body = {
-          status: 20,
+          // status: 200,
           code: 1,
           datas: {
             social_prcs,
@@ -26,13 +26,13 @@ export default class SocialPrcController {
     public static async showSocialPrcDetail(ctx: Context) {
       await Auth.Verify(ctx);
       const socialPrcRepository = getManager().getRepository(Social_Prc);
-      const socialPrc = await socialPrcRepository.findBy({ studentNo: +ctx.state.user.id });
+      const socialPrcs = await socialPrcRepository.findBy({ studentNo: +ctx.state.user.id });
   
-      if (socialPrc) {
+      if (socialPrcs) {
         ctx.status = 200;
         ctx.body = {
           code: 1,
-          datas: socialPrc,
+          datas: socialPrcs,
         };
         // ctx.body = socialPrc;
       } else {
@@ -41,7 +41,6 @@ export default class SocialPrcController {
             code: -1,
             msg:'用户不存在',
           }
-        throw new NotFoundException();
       }
     }
 
@@ -52,6 +51,8 @@ export default class SocialPrcController {
       newPrc.stuName = ctx.request.body.stuName;
       newPrc.studentNo = ctx.request.body.studentNo;
       newPrc.user = ctx.request.body.studentNo;
+      newPrc.department = ctx.request.body.department;
+      newPrc.grade = ctx.request.body.grade;
       newPrc.date = ctx.request.body.date;
       newPrc.title = ctx.request.body.title;
       newPrc.content = ctx.request.body.content;
@@ -82,26 +83,31 @@ export default class SocialPrcController {
     }
 
     public static async updateSocialPrc(ctx: Context) {
-    
+      // console.log(ctx.request.body.stuName)
+      console.log(ctx.request.body)
       const socialPrcRepository = getManager().getRepository(Social_Prc);
       //根据学生姓名跟社会实践名称唯一确定一条信息
         await socialPrcRepository.update({ stuName: ctx.request.body.stuName, title: ctx.request.body.title}, ctx.request.body);
         const socialPrc = await socialPrcRepository.findOneBy({ stuName: ctx.request.body.stuName, title: ctx.request.body.title});
     
         if (socialPrc) {
+          console.log('111')
           ctx.status = 200;
           ctx.body = {
             code: 1,
             
           };
+          console.log('社会实践信息修改成功');
         } else {
+
+          // console.log('222')
           ctx.status = 200;
           ctx.body = {
             code: -1,
             msg: '更新失败'
           };
         }
-        console.log('社会实践信息修改成功');
+        
 
     }
    

@@ -41,7 +41,6 @@ export default class AchievementController {
               code: -1,
               msg:'用户不存在',
             }
-          throw new NotFoundException();
         }
       }
   
@@ -52,6 +51,8 @@ export default class AchievementController {
         newAchieve.stuName = ctx.request.body.stuName;
         newAchieve.studentNo = ctx.request.body.studentNo;
         newAchieve.user = ctx.request.body.studentNo;
+        newAchieve.department = ctx.request.body.department;
+        newAchieve.grade = ctx.request.body.grade;
         newAchieve.date = ctx.request.body.date;
         newAchieve.title = ctx.request.body.title;
         newAchieve.result = ctx.request.body.result;

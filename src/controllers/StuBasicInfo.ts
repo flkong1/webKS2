@@ -12,15 +12,6 @@ import { Department } from '../entity/department';
 export default class StuBasicInfoController {
   //管理员端展示所有人的信息
     public static async listStuBasicInfo(ctx: Context) {
-      // if(ctx.cookies.get('token')){
-      //   console.log(ctx.cookies.get('token'))
-
-      // }else{
-      //   console.log('没有cookie')
-      // }
-      
-      // await Auth.Verify(ctx);
-      // console.log(ctx.state.user)
         const stuBasicInfoRepository = getManager().getRepository(User_Student);
         const stuBasicInfo = await stuBasicInfoRepository.findBy({ department: ctx.request.body.dpt, grade: ctx.request.body.grade});
         // const stuBasicInfo = await stuBasicInfoRepository.findBy({ department: ctx.request.body.dpt});
@@ -33,7 +24,6 @@ export default class StuBasicInfoController {
           }
         };
 
-        // ctx.body = stuBasicInfo;
       }
   //用户端展示自己的信息(需要在url中传入studentNo或user)
       public static async showStuBasicInfoDetail(ctx: Context) {
@@ -59,7 +49,6 @@ export default class StuBasicInfoController {
             code: -1,
             msg:'用户不存在',
           }
-          throw new NotFoundException();
         }
       }
 
@@ -69,12 +58,12 @@ export default class StuBasicInfoController {
         const stuBasicInfoRepository = getManager().getRepository(User_Student);
         const stu = await stuBasicInfoRepository.findOneBy({ studentNo: ctx.request.body.studentNo });
         if(stu){
+          console.log('11111')
           ctx.status = 200;
           ctx.body = {
             code: -1,
             msg: '用户已存在'
           };
-          throw new AlreadyExistsException();
 
         }else{
           const newStu = new User_Student();
@@ -129,7 +118,10 @@ export default class StuBasicInfoController {
           console.log('基本信息修改成功');
             
         } else {
-          throw new NotFoundException();
+          ctx.body = {
+            code: -1,
+            msg: '用户不存在',
+          };
         }
 
       }
@@ -155,7 +147,6 @@ export default class StuBasicInfoController {
             code: -1,
             msg: '用户不存在'
           };
-          throw new NotFoundException();
         }
       
       }
