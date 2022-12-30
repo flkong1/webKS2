@@ -1,11 +1,7 @@
 import { Context } from 'koa';
 import { getManager } from 'typeorm';
-import { UnauthorizedException } from '../exceptions';
-import jwt from 'jsonwebtoken';
-import svgCaptcha from 'svg-captcha';
-import { JWT_SECRET } from '../constants';
-import { NotFoundException, ForbiddenException,AlreadyExistsException } from '../exceptions'
 import { User_Student } from '../entity/user_student';
+import { User } from '../entity/user';
 import Auth from '../authMiddleware/auth';
 import { Department } from '../entity/department';
 
@@ -54,43 +50,55 @@ export default class StuBasicInfoController {
 
       //管理员端增加用户基本信息
       public static async addStuBasicInfo(ctx: Context) {
-        console.log(ctx.request.body) 
-        const stuBasicInfoRepository = getManager().getRepository(User_Student);
-        const stu = await stuBasicInfoRepository.findOneBy({ studentNo: ctx.request.body.studentNo });
-        if(stu){
-          console.log('11111')
-          ctx.status = 200;
-          ctx.body = {
-            code: -1,
-            msg: '用户已存在'
-          };
+        console.log(ctx.request.body)
+        const userRepository = getManager().getRepository(User);
+        const user = await userRepository.findOneBy({ name: ctx.request.body.studentNo });
+        if(user){
 
-        }else{
-          const newStu = new User_Student();
-          newStu.user = ctx.request.body.studentNo;       //外键有点问题
-          newStu.studentNo = ctx.request.body.studentNo;
-          newStu.name = ctx.request.body.name;
-          newStu.grade = ctx.request.body.grade;
-          newStu.gender = ctx.request.body.gender;
-          newStu.graduateSchool = ctx.request.body.graduateSchool;
-          newStu.birthDate = ctx.request.body.birthDate;
-          newStu.identityNum = ctx.request.body.identityNum;
-          newStu.politicalAppearance = ctx.request.body.politicalAppearence;
-          newStu.phoneNum = ctx.request.body.phoneNum;
-          newStu.department = ctx.request.body.department;
-          newStu.status = ctx.request.body.status;
-          newStu.class = ctx.request.body.class;
-          
-          const nstu = await stuBasicInfoRepository.save(newStu);
+          const stuBasicInfoRepository = getManager().getRepository(User_Student);
+          const stu = await stuBasicInfoRepository.findOneBy({ studentNo: ctx.request.body.studentNo });
+          if(stu){
+            console.log('11111')
+            ctx.status = 200;
+            ctx.body = {
+              code: -1,
+              msg: '用户已存在'
+            };
   
-          console.log('基本信息添加成功');
+          }else{
+            const newStu = new User_Student();
+            newStu.user = ctx.request.body.studentNo;       //外键有点问题
+            newStu.studentNo = ctx.request.body.studentNo;
+            newStu.name = ctx.request.body.name;
+            newStu.grade = ctx.request.body.grade;
+            newStu.gender = ctx.request.body.gender;
+            newStu.graduateSchool = ctx.request.body.graduateSchool;
+            newStu.birthDate = ctx.request.body.birthDate;
+            newStu.identityNum = ctx.request.body.identityNum;
+            newStu.politicalAppearance = ctx.request.body.politicalAppearance;
+            newStu.phoneNum = ctx.request.body.phoneNum;
+            newStu.department = ctx.request.body.department;
+            newStu.status = ctx.request.body.status;
+            newStu.class = ctx.request.body.class;
+            console.log(newStu.user)
+            const nstu = await stuBasicInfoRepository.save(newStu);
+    
+            console.log('基本信息添加成功');
 
-          ctx.status = 200;
-          ctx.body = {
-            code: 1,
-            // datas: nstu,
-          };
-        } 
+            ctx.status = 200;
+            ctx.body = {
+              code: 1,
+              // datas: nstu,
+            };
+          } 
+      }else{
+        ctx.status = 200;
+        ctx.body = {
+          code: -1,
+          msg: '用户未注册'
+        };
+
+      }
       }
 
       //管理员段修改学生基本信息

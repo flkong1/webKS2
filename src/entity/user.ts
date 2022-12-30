@@ -19,14 +19,7 @@ export class User {
   @Column()
   email: string;
 
-  @OneToMany(() => Social_Prc, social_prc => social_prc.user)
-  social_prcs: Social_Prc[];
 
-  @OneToMany(() => Achievement, achievement => achievement.user)
-  achievements: Achievement[];
-
-  @OneToMany(() => Extracurricular, extracurricular => extracurricular.user)
-  extracurriculars: Extracurricular[];
 
   // @Column()
   // type: string;

@@ -8,12 +8,10 @@ export default class Auth{
         //字符串处理，将header中authorization字段中的bearer 替换成空
         // const token = authorization.replace('Bearer ', '')
         const token = ctx.cookies.get('token');
-        console.log('001')
 
         try{
             //用verify验证token，验证成功之后提取出其中的payload（id,user_name,is_admin），验证失败则抛出异常
             const user = jwt.verify(token, JWT_SECRET)
-            console.log('002')
             ctx.state.user = user
             console.log('token 验证成功')
     

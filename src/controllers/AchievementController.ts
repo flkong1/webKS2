@@ -1,6 +1,7 @@
 import { Context } from 'koa';
 import { getManager } from 'typeorm';
 import { Achievement } from '../entity/achievement';
+import { User } from '../entity/user';
 import { NotFoundException, ForbiddenException, UnauthorizedException } from '../exceptions'
 import Auth from '../authMiddleware/auth';
 
@@ -45,25 +46,36 @@ export default class AchievementController {
       }
   
       public static async addAchieve(ctx: Context) {
-        const achieveRepository = getManager().getRepository(Achievement);
+        const userRepository = getManager().getRepository(User);
+        const user = await userRepository.findOneBy({ name: ctx.request.body.studentNo });
+        if(user){
+          const achieveRepository = getManager().getRepository(Achievement);
   
-        const newAchieve = new Achievement();
-        newAchieve.stuName = ctx.request.body.stuName;
-        newAchieve.studentNo = ctx.request.body.studentNo;
-        newAchieve.user = ctx.request.body.studentNo;
-        newAchieve.department = ctx.request.body.department;
-        newAchieve.grade = ctx.request.body.grade;
-        newAchieve.date = ctx.request.body.date;
-        newAchieve.title = ctx.request.body.title;
-        newAchieve.result = ctx.request.body.result;
+          const newAchieve = new Achievement();
+          newAchieve.stuName = ctx.request.body.stuName;
+          newAchieve.studentNo = ctx.request.body.studentNo;
+          // newAchieve.user = ctx.request.body.studentNo;
+          newAchieve.department = ctx.request.body.department;
+          newAchieve.grade = ctx.request.body.grade;
+          newAchieve.date = ctx.request.body.date;
+          newAchieve.title = ctx.request.body.title;
+          newAchieve.result = ctx.request.body.result;
   
-        const achieve = await achieveRepository.save(newAchieve);
-        console.log('成果奖励信息添加成功')
+          const achieve = await achieveRepository.save(newAchieve);
+          console.log('成果奖励信息添加成功')
   
-        ctx.status = 200;
-        ctx.body = {
-          code: 1,
-        };
+          ctx.status = 200;
+          ctx.body = {
+            code: 1,
+          };
+        }else{
+          ctx.status = 200;
+          ctx.body = {
+            code: -1,
+            msg: '用户未注册'
+          };
+  
+        }
         
   
       }
@@ -71,7 +83,7 @@ export default class AchievementController {
       public static async deleteAchieve(ctx: Context) {
           
         const achieveRepository = getManager().getRepository(Achievement);
-        await achieveRepository.delete({stuName: ctx.request.body.stuName, title: ctx.request.body.title});
+        await achieveRepository.delete({studentNo: ctx.request.body.studentNo, title: ctx.request.body.title});
     
         ctx.status = 200;
         ctx.body = {

@@ -1,24 +1,24 @@
 //成果奖励表
-import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn,ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn,ManyToOne } from 'typeorm';
+import { User_Student } from './user_student';
 import { User } from './user';
 
 @Entity()
 export class Achievement {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   achieveNo: number;
 
   @Column()
   studentNo: number;
-
-  @Column()
-  stuName: string;
-
-  @ManyToOne(() => User, user => user.achievements, {
+  @ManyToOne(() => User_Student, user_student => user_student.achievements, {
     onDelete: 'CASCADE',
     // cascade: true,
   })
-  @JoinColumn({ name: 'userNo' })
-  user: User;
+  @JoinColumn({ name: 'studentNo' })
+  user_student: number;
+
+  @Column()
+  stuName: string;
 
   @Column()
   grade: string;

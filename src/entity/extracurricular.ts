@@ -1,6 +1,7 @@
 //课外活动表
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn,ManyToOne } from 'typeorm';
 import { User } from './user';
+import { User_Student } from './user_student';
 
 @Entity()
 export class Extracurricular {
@@ -10,15 +11,15 @@ export class Extracurricular {
   @Column()
   studentNo: number;
 
-  @Column()
-  stuName: string;
-
-  @ManyToOne(() => User, user => user.extracurriculars, {
+  @ManyToOne(() => User_Student, user_student => user_student.extracurriculars, {
     // cascade: true,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'userNo' })
-  user: User;
+  @JoinColumn({ name: 'studentNo' })
+  user_student: User_Student;
+
+  @Column()
+  stuName: string;
 
   @Column()
   department: string;

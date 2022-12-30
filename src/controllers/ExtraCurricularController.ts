@@ -2,6 +2,7 @@ import { Context } from 'koa';
 import { getManager } from 'typeorm';
 import jwt from 'jsonwebtoken';
 import { Extracurricular } from '../entity/extracurricular';
+import { User } from '../entity/user';
 import { JWT_SECRET } from '../constants';
 import { NotFoundException, ForbiddenException, UnauthorizedException } from '../exceptions'
 import Auth from '../authMiddleware/auth';
@@ -12,7 +13,7 @@ export default class ExtraCurricularController {
       public static async listExCurricular(ctx: Context) {
         const exCurricularRepository = getManager().getRepository(Extracurricular);
         const exCurriculars = await exCurricularRepository.find();
-    
+        console.log(exCurriculars)
         ctx.status = 200;
         ctx.body = {
             status: 20,
@@ -46,25 +47,34 @@ export default class ExtraCurricularController {
   
       public static async addExCurricular(ctx: Context) {
         const exCurricularRepository = getManager().getRepository(Extracurricular);
+        const userRepository = getManager().getRepository(User);
+        const user = await userRepository.findOneBy({ name: ctx.request.body.studentNo });
+        if(user){
+          const newCur = new Extracurricular();
+          newCur.stuName = ctx.request.body.stuName;
+          // newCur.stuNo = ctx.request.body.stuName;
+          newCur.studentNo = ctx.request.body.studentNo;
+          newCur.department = ctx.request.body.department;
+          newCur.grade = ctx.request.body.grade;
+          newCur.date = ctx.request.body.date;
+          newCur.title = ctx.request.body.title;
+          newCur.content = ctx.request.body.content;
+          newCur.result = ctx.request.body.result;
+    
+          const prc = await exCurricularRepository.save(newCur);
+          console.log('课外活动信息添加成功')
   
-        const newCur = new Extracurricular();
-        newCur.stuName = ctx.request.body.stuName;
-        newCur.user = ctx.request.body.studentNo;
-        newCur.studentNo = ctx.request.body.studentNo;
-        newCur.department = ctx.request.body.department;
-        newCur.grade = ctx.request.body.grade;
-        newCur.date = ctx.request.body.date;
-        newCur.title = ctx.request.body.title;
-        newCur.content = ctx.request.body.content;
-        newCur.result = ctx.request.body.result;
-  
-        const prc = await exCurricularRepository.save(newCur);
-        console.log('课外活动信息添加成功')
-  
-        ctx.status = 200;
-        ctx.body = {
-          code: 1,
-        };
+          ctx.status = 200;
+          ctx.body = {
+            code: 1,
+          };
+        }else{
+          ctx.status = 200;
+          ctx.body = {
+            code: -1,
+            msg: '用户未注册'
+          };
+        }
         
   
       }
@@ -72,7 +82,7 @@ export default class ExtraCurricularController {
       public static async deleteExCurricular(ctx: Context) {
           
         const exCurricularRepository = getManager().getRepository(Extracurricular);
-        await exCurricularRepository.delete({stuName: ctx.request.body.stuName, title: ctx.request.body.title});
+        await exCurricularRepository.delete({studentNo: ctx.request.body.studentNo, title: ctx.request.body.title});
     
         ctx.status = 200;
         ctx.body = {

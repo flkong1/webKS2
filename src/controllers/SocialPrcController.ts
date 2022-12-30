@@ -1,6 +1,7 @@
 import { Context } from 'koa';
 import { getManager } from 'typeorm';
 import { Social_Prc } from '../entity/social_prc';
+import { User } from '../entity/user';
 import { NotFoundException, ForbiddenException, UnauthorizedException } from '../exceptions'
 import Auth from '../authMiddleware/auth';
 
@@ -47,32 +48,45 @@ export default class SocialPrcController {
     public static async addSocialPrc(ctx: Context) {
       const socialPrcRepository = getManager().getRepository(Social_Prc);
 
-      const newPrc = new Social_Prc();
-      newPrc.stuName = ctx.request.body.stuName;
-      newPrc.studentNo = ctx.request.body.studentNo;
-      newPrc.user = ctx.request.body.studentNo;
-      newPrc.department = ctx.request.body.department;
-      newPrc.grade = ctx.request.body.grade;
-      newPrc.date = ctx.request.body.date;
-      newPrc.title = ctx.request.body.title;
-      newPrc.content = ctx.request.body.content;
-      newPrc.result = ctx.request.body.result;
+      const userRepository = getManager().getRepository(User);
+      const user = await userRepository.findOneBy({ name: ctx.request.body.studentNo });
+      if(user){
 
-      const prc = await socialPrcRepository.save(newPrc);
-      console.log('社会实践经历添加成功')
 
-      ctx.status = 200;
-      ctx.body = {
-        code: 1,
-      };
+        const newPrc = new Social_Prc();
+        newPrc.stuName = ctx.request.body.stuName;
+        newPrc.studentNo = ctx.request.body.studentNo;
+        // newPrc.user = ctx.request.body.studentNo;
+        newPrc.department = ctx.request.body.department;
+        newPrc.grade = ctx.request.body.grade;
+        newPrc.date = ctx.request.body.date;
+        newPrc.title = ctx.request.body.title;
+        newPrc.content = ctx.request.body.content;
+        newPrc.result = ctx.request.body.result;
+
+        const prc = await socialPrcRepository.save(newPrc);
+        console.log('社会实践经历添加成功')
+        console.log(newPrc.user_student)
+
+        ctx.status = 200;
+        ctx.body = {
+          code: 1,
+        };
       
+      } else{
+        ctx.status = 200;
+        ctx.body = {
+          code: -1,
+          msg: '用户未注册'
+        };
 
+      }
     }
 
     public static async deleteSocialPrc(ctx: Context) {
         
       const socialPrcRepository = getManager().getRepository(Social_Prc);
-      await socialPrcRepository.delete({stuName: ctx.request.body.stuName, title: ctx.request.body.title});
+      await socialPrcRepository.delete({studentNo: ctx.request.body.studentNo, title: ctx.request.body.title});
   
       ctx.status = 200;
       ctx.body = {

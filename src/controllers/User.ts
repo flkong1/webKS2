@@ -99,27 +99,46 @@ export default class UserController {
 
     /*lxy*/
     public static async changePwd(ctx: Context) {
-      const userId = +ctx.params.name;
       await Auth.Verify(ctx)
-      console.log(userId)
-      console.log(ctx.state.user.id)
-       if (userId !== +ctx.state.user.id) {
+      //验证原密码是否正确
+      const preuserRepository = getManager().getRepository(User);   
+      const preUser = await preuserRepository.findOneBy({ name: ctx.state.user.id });
+      
+      if(preUser){
+        if(await argon2.verify(preUser.password, ctx.request.body.oldPass)){
+          ctx.request.body.password = await argon2.hash(ctx.request.body.password);
+          await getConnection()
+          .createQueryBuilder()
+          .update(User)
+          .set({password: ctx.request.body.password})
+          .where("name = :name",{name: ctx.state.user.id})
+          .execute();
+          
+          const userRepository = getManager().getRepository(User);   
+          const updatedUser = await userRepository.findOneBy({ name: ctx.state.user.id });
+          if (updatedUser) {
+            ctx.status = 200;
+            ctx.body = {
+              code: 1,
+            };
+          } else {
+            ctx.status = 200;
+            ctx.body = {
+            code: -1,
+            msg: '更改密码失败'
+          };
+         }
+        }else{
+          ctx.status = 200;
+            ctx.body = {
+            code: -1,
+            msg: '原密码错误'
+          };
 
-         throw new ForbiddenException();
+        }
+      }
 
-       }
-       
-       ctx.request.body.password = await argon2.hash(ctx.request.body.password);
-       const userRepository = getManager().getRepository(User);
-       await userRepository.update(+ctx.params.name, ctx.request.body);
-       const updatedUser = await userRepository.findOneBy({ name: +ctx.params.name });
-
-      if (updatedUser) {
-        ctx.status = 200;
-        ctx.body = updatedUser;
-      } else {
-       ctx.status = 404;
-     }
+      
   }
 
       

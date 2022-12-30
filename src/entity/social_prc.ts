@@ -1,22 +1,22 @@
 //社会实践表
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn,ManyToOne } from 'typeorm';
 import { User } from './user';
+import { User_Student } from './user_student';
 
 @Entity()
 export class Social_Prc {
   @PrimaryGeneratedColumn()
   prcNo: number;
 
-  @ManyToOne(() => User, user => user.social_prcs, {
+  @Column()
+  studentNo: number;
+  @ManyToOne(() => User_Student, user_student => user_student.social_prcs, {
     // cascade: true,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'userNo' })
-  user: User;
+  @JoinColumn({ name: 'studentNo' })
+  user_student: User_Student;
 
-
-  @Column()
-  studentNo: number;
 
   @Column()
   stuName: string;
