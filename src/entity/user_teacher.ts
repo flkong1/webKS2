@@ -14,7 +14,6 @@ export class User_Teacher {
   @JoinColumn({name: 'userNo'})
   user: User;
 
-  
   @Column()
   name: string;//姓名
 

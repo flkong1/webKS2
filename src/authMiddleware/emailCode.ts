@@ -14,7 +14,6 @@ const transport = Nodemailer.createTransport(config);
 
 
 export const sendEmail = async (mail: Options) => {
-    console.log('111111')
     let res = {};
     let start_time = new Date().getTime();
     return new Promise((resolve,reject)=>{

@@ -9,6 +9,7 @@ import { createConnection } from 'typeorm';
 import jwt from 'koa-jwt';
 import koaSession from 'koa-session';
 import koaBody from 'koa-body';
+import path from 'path';
 import 'reflect-metadata';
 
 // 配合 signed 属性的签名key
@@ -22,12 +23,32 @@ createConnection()
     // session 实例化
     const session = koaSession(sessionConfig, app);
     app.keys = session_signed_key;
+
+    // app.use(bodyParser());
+    
+    app.use(koaBody({
+      multipart: true,  //设置支持文件格式
+      formidable: {
+       //这是个 node 包, 设置一下选项
+       uploadDir: path.join(__dirname,'./uploadPhoto'), //设置上传目录
+      //不推荐使用相对路径
+      keepExtensions: true,  //设置文件后缀名保留
+      // maxFileSize: 100*1024*1024,
+      onFileBegin:(name,file) =>{
+        console.log(file);
+      }
+      }
+    }))
+
     app.use(session);
 
     // 注册中间件
     app.use(logger());
     app.use(cors());
-    app.use(bodyParser());
+    
+
+
+
     // 错误处理中间件
     app.use(async (ctx, next) => {
       try {
@@ -52,3 +73,7 @@ createConnection()
     app.listen(3000);
   })
   .catch((err: string) => console.log('TypeORM connection error:', err));
+function multer(arg0: { storage: any; }) {
+  throw new Error('Function not implemented.');
+}
+

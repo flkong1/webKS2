@@ -3,7 +3,6 @@ import { getManager } from 'typeorm';
 import { User_Student } from '../entity/user_student';
 import { User } from '../entity/user';
 import Auth from '../authMiddleware/auth';
-import { Department } from '../entity/department';
 
 export default class StuBasicInfoController {
   //管理员端展示所有人的信息

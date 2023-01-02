@@ -77,6 +77,7 @@ export default class CourseController {
         newCourse.grade = ctx.request.body.grade;
         newCourse.term = ctx.request.body.term;
         newCourse.totalStu = ctx.request.body.totalStu;
+        newCourse.selectedStu = 1;
         newCourse.area = ctx.request.body.area;
         newCourse.room = ctx.request.body.room;
         newCourse.day = ctx.request.body.day;

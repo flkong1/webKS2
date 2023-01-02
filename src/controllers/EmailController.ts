@@ -3,7 +3,6 @@ import { sendEmail} from '../authMiddleware/emailCode';
 export default class emailController {
     // const getEmailCode = async ctx => 
 public static async getEmailCode(ctx: Context){
-    console.log('111111')
     let codeStr = "";  //验证码
     let codeLen = 6;   //验证码长度
     for(let i=0;i<codeLen;i++){

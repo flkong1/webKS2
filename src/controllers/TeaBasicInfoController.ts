@@ -12,6 +12,7 @@ import { User_Teacher } from '../entity/user_teacher';
 export default class TeaBasicInfoController {
   //管理员端展示所有人的信息
     public static async listTeaBasicInfo(ctx: Context) {
+      console.log('11111')
         const teaBasicInfoRepository = getManager().getRepository(User_Teacher);
         const teaBasicInfo = await teaBasicInfoRepository.findBy({ department: ctx.request.body.dpt});
         // const teaBasicInfo = await teaBasicInfoRepository.findBy({ department: ctx.request.body.dpt});
@@ -25,6 +26,34 @@ export default class TeaBasicInfoController {
         };
 
       }
+
+  //管理员端调用所有老师的名字
+  public static async listTeacherName(ctx: Context) {
+    console.log('555555')
+      const teaBasicInfoRepository = getManager().getRepository(User_Teacher);
+      const allTeaName = await teaBasicInfoRepository.query("select name from User_Teacher");
+      //const allTeaName = teaBasicInfo.teacherName;
+      // const teaBasicInfo = await teaBasicInfoRepository.findBy({ department: ctx.request.body.dpt});
+  
+      if(allTeaName){
+        ctx.status = 200;
+        ctx.body = {
+          code: 1,
+          datas: {
+            allTeaName,
+          }
+        };
+      } else {
+        ctx.status = 200;
+          ctx.body = {
+            code: -1,
+            msg:'查询不到教师名字',
+          }
+      }
+      
+
+    }
+      
   //教师端展示自己的信息(需要在url中传入teacherNo或user)
       public static async showTeaBasicInfoDetail(ctx: Context) {
         console.log('entered')
@@ -72,7 +101,6 @@ export default class TeaBasicInfoController {
           newTea.teacherNo = ctx.request.body.teacherNo;
           newTea.name = ctx.request.body.name;
           newTea.birth = ctx.request.body.birth;
-          newTea.gender = ctx.request.body.gender;
           newTea.idCard = ctx.request.body.idCard;
           newTea.political = ctx.request.body.political;
           newTea.telephone = ctx.request.body.telephone;
@@ -82,6 +110,7 @@ export default class TeaBasicInfoController {
           newTea.direction = ctx.request.body.direction;
           newTea.teaCourse = ctx.request.body.teaCourse;
           newTea.book = ctx.request.body.book;
+          newTea.gender = ctx.request.body.gender;
           console.log(newTea)
           const ntea = await teaBasicInfoRepository.save(newTea);
   

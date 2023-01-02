@@ -7,6 +7,9 @@ import StudentAdminController from './controllers/StudentAdmin';
 import DeptController from './controllers/Dept';
 import SocialPrcController from './controllers/SocialPrcController';
 import StuBasicInfoController from './controllers/StuBasicInfo';
+import UploadController from './controllers/UploadController';
+import SelectCourseController from './controllers/SelectCourseController';
+import ScoreController from './controllers/ScoreController';
 import ExtraCurricularController from './controllers/ExtraCurricularController';
 import AchievementController from './controllers/AchievementController';
 import  EvaluateController  from './controllers/EvaluateController';
@@ -14,6 +17,8 @@ import  CourseController  from './controllers/CourseController';
 import  TeaBasicInfoController  from './controllers/TeaBasicInfoController';
 import EmailController from './controllers/EmailController';
 import PortraitController from './controllers/potraitController';
+import CourseInquireController from './controllers/CourseInquireController';
+import TeachManageController from './controllers/TeachManageController';
 
 const unprotectedRouter = new Router();
 
@@ -31,7 +36,8 @@ const protectedRouter = new Router();
 //跟账号相关
 unprotectedRouter.get('/users', UserController.listUsers);
 unprotectedRouter.get('/users/:name', UserController.showUserDetail);
-unprotectedRouter.post('/users/add',AuthController.register)
+unprotectedRouter.post('/users/add',AuthController.register);
+unprotectedRouter.post('/users/resetPwd',AuthController.resetPwd);
 unprotectedRouter.put('/users/:name', UserController.updateUser);
 unprotectedRouter.delete('/users/:name', UserController.deleteUser);
 // protectedRouter.post('/stuAdmin/insertStudent', StudentAdminController.insertStudent);
@@ -47,6 +53,13 @@ unprotectedRouter.post('/course/openOrCloseCourse',CourseController.openOrCloseC
 unprotectedRouter.post('/course/addCourse',CourseController.addCourse);
 unprotectedRouter.post('/course/updateCourse',CourseController.updateCourse);
 unprotectedRouter.post('/course/deleteCourse',CourseController.deleteCourse);
+unprotectedRouter.post('/stu/selectCourse',SelectCourseController.selectCourse);
+unprotectedRouter.post('/stu/listCourse',SelectCourseController.listCourse);
+unprotectedRouter.post('/stu/deleteSelect',SelectCourseController.deleteSelect);
+
+//成绩
+unprotectedRouter.post('/stu/getScoreTable',ScoreController.checkScore);
+
 
 //学生基本信息
 unprotectedRouter.post('/stuBasicInfo/getInfoTable', StuBasicInfoController.listStuBasicInfo);
@@ -61,6 +74,21 @@ unprotectedRouter.post('/teaBasicInfo/getInfo',TeaBasicInfoController.showTeaBas
 unprotectedRouter.post('/teaBasicInfo/add',TeaBasicInfoController.addTeaBasicInfo);
 unprotectedRouter.post('/teaBasicInfo/update',TeaBasicInfoController.updateTeaBasicInfo);
 unprotectedRouter.post('/teaBasicInfo/delete',TeaBasicInfoController.deleteTeaBasicInfo);
+
+//返回前端所有教师的名字
+unprotectedRouter.post('/teaBasicInfo/getTeacherName', TeaBasicInfoController.listTeacherName);
+
+//教师端方法
+unprotectedRouter.post('/teacher/showTermSchedule', CourseInquireController.showTermSchedule);//学期课表
+unprotectedRouter.post('/teacher/showClassroomSchedule',CourseInquireController.showClassroomSchedule);//教室课表
+unprotectedRouter.post('/teacher/showTeachCourse',TeachManageController.showTeachCourse);//教学班级
+unprotectedRouter.post('/teacher/showTeachManage',TeachManageController.showTeachManage);//教学任务
+unprotectedRouter.post('/teacher/addStudentScore',TeachManageController.addStudentScore);//添加学生成绩信息+标签信息
+unprotectedRouter.post('/teacher/showCourse',TeachManageController.showCourse);////教师端查询教学课程
+//unprotectedRouter.post('/teacher/submitStuScore',TeachManageController.submitStuScore);//提交学生成绩
+//unprotectedRouter.post('/teacher/ifEditStatus',TeachManageController.ifEditStatus);//查询编辑状态
+//unprotectedRouter.post('/teacher/upupdateEditStatus',TeachManageController.upupdateEditStatus);//更改编辑状态
+//unprotectedRouter.post('/teacher/teaQuery',TeachManageController.teaQuery);////教师端-教学班级页面查询方法
 
 //社会实践 
 unprotectedRouter.post('/social_prc/list/getInfoTable', SocialPrcController.listSocialPrc);
@@ -92,5 +120,8 @@ unprotectedRouter.post('/evaluate/evaluateMe',EvaluateController.evaluateMe);
 
 //用户画像
 unprotectedRouter.post('/portrait/listCharacter',PortraitController.listCharacter);
+
+//头像上传
+unprotectedRouter.post('/user/addPhoto',UploadController.addPhoto);
 
 export { protectedRouter, unprotectedRouter };

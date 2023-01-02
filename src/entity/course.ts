@@ -1,5 +1,6 @@
 // 课程表
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
+import { SelectRecord } from './selectRecord';
 
 @Entity()
 export class Course {
@@ -32,7 +33,10 @@ export class Course {
   term: string;
 
   @Column()
-  totalStu: string;
+  totalStu: number;
+
+  @Column()
+  selectedStu: number;
 
   @Column()
   area: string;
@@ -47,4 +51,7 @@ export class Course {
   //哪个时间段上课
   @Column()
   time: string;
+
+  @OneToMany(() => SelectRecord, selectRecord => selectRecord.course)
+  selectRecords: SelectRecord[];
 }

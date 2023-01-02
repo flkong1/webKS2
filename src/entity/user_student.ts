@@ -18,7 +18,7 @@ export class User_Student {
   @JoinColumn({name: 'userNo'})
   user: number;   
   
-  @OneToMany(() => SelectRecord, selectRecord => selectRecord.user_student)
+  @OneToMany(() => SelectRecord, selectRecord => selectRecord.student)
   selectRecords: SelectRecord[];
 
   @OneToMany(() => Social_Prc, social_prc => social_prc.user_student)

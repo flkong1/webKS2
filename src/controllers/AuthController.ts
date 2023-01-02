@@ -125,17 +125,42 @@ export default class AuthController {
 
   public static async register(ctx: Context) {
     const userRepository = getManager().getRepository(User);
-    console.log(ctx.request.body.password)
-    const newUser = new User();
-    newUser.name = ctx.request.body.name;
-    newUser.email = ctx.request.body.email;
-    newUser.password = await argon2.hash(ctx.request.body.password);
-    console.log(newUser.password)
-    // 保存到数据库
-    const user = await userRepository.save(newUser);
+    const exsist = await userRepository.findOneBy({name: ctx.request.body.user});
+    if(exsist){
+      ctx.status = 200;
+      ctx.body = {
+        code: -1,
+        msg: '用户名已存在'
+      };
+    }
+    console.log(ctx.request.body.pass)
 
-    ctx.status = 201;
-    ctx.body = user;
+    const studentReg = /^(20)(1|2)\d{6}$/;
+    const teacherReg = /^((0[1-9])|10|11|12)(([0-2][1-9])|10|20|30|31)\d{5}$/;
+    const adminReg = /^(1000)\d{5}/;
+    // console.log(ctx.request.body.user)
+    // console.log(studentReg.test(ctx.request.body.user) )
+    if(studentReg.test(ctx.request.body.user) || 
+       teacherReg.test(ctx.request.body.user) || 
+       adminReg.test(ctx.request.body.user)){
+        
+        const newUser = new User();
+        newUser.name = ctx.request.body.user;
+        newUser.email = ctx.request.body.email;
+        newUser.password = await argon2.hash(ctx.request.body.pass);
+        console.log(newUser.password)
+        const user = await userRepository.save(newUser);
+        ctx.status = 200;
+        ctx.body = {
+          code: 1,
+        };
+    }else{
+      ctx.status = 200;
+      ctx.body = {
+        code: -1,
+        msg: '请检查用户名格式是否正确'
+      };
+    }
   }
 
   public static async change(ctx: Context) {
@@ -151,5 +176,38 @@ export default class AuthController {
 
     ctx.status = 201;
     ctx.body = user;
+  }
+
+  public static async resetPwd(ctx: Context) {
+    console.log(ctx.request.body)
+    const userRepository = getManager().getRepository(User);
+    const user =await userRepository.findOneBy({name: ctx.request.body.user}) 
+    if(user){
+      if(user.email == ctx.request.body.email){
+        ctx.request.body.pass = await argon2.hash(ctx.request.body.pass);
+        const resetUser = new User();
+        resetUser.name = ctx.request.body.user;
+        resetUser.password = ctx.request.body.pass;
+        resetUser.email = ctx.request.body.email;
+        await userRepository.update(ctx.request.body.user,resetUser);
+        ctx.status = 200;
+        ctx.body = {
+          code: 1,
+        };
+
+      }else{
+        ctx.body = {
+          code: -1,
+          msg:'用户名或邮箱输入错误',
+        }
+      }
+
+    }else{
+      ctx.body = {
+        code: -1,
+        msg:'用户名不存在',
+      }
+    }
+
   }
 }
