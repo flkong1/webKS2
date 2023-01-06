@@ -1,6 +1,8 @@
 // 学生表
 import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { User } from './user';
+import { Blog } from './blog';
+import { Score } from './score';
 import { Social_Prc } from './social_prc';
 import { Achievement } from './achievement';
 import { SelectRecord } from './selectRecord';
@@ -29,6 +31,12 @@ export class User_Student {
 
   @OneToMany(() => Extracurricular, extracurricular => extracurricular.user_student)
   extracurriculars: Extracurricular[];
+
+  @OneToMany(() => Blog, blog => blog.user_student)
+  blogs: Blog[];
+
+  @OneToMany(() => Score, score => score.student)
+  scores: Score[];
   
   @Column()
   name: string;
@@ -62,4 +70,6 @@ export class User_Student {
 
   @Column()
   class: number;
+
+
 }

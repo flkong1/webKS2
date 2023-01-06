@@ -25,11 +25,16 @@ export class SelectRecord {
   @JoinColumn({ name: 'courseNo' })
   course: Course;
 
-  @Column()
+  @Column({
+    type: "double",
+  })
   score: number;
 
   @Column()
-  label: string;
+  classRank: number;
+
+  // @Column()
+  // label: string;
 
 
 

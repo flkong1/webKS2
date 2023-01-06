@@ -13,6 +13,7 @@ export class Social_Prc {
   @ManyToOne(() => User_Student, user_student => user_student.social_prcs, {
     // cascade: true,
     onDelete: 'CASCADE',
+    eager: true,
   })
   @JoinColumn({ name: 'studentNo' })
   user_student: User_Student;

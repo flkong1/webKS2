@@ -76,6 +76,37 @@ export default class EvaluateController {
 
     }
 
+    //管理员端删除不当评论信息
+    public static async admDeleteEvaluate(ctx: Context) {
+        const evaluateRepository = getManager().getRepository(Evaluate);
+        const meEvaluated = await evaluateRepository.delete({evaluateNo: ctx.request.body.evaluateNo})
+        ctx.status = 200;
+        ctx.body = {
+          code: 1,
+        };
+      }
+
+    
+    //删除我评价过的
+    public static async deleteEvaluate(ctx: Context) {
+      await Auth.Verify(ctx);
+      const stuBasicInfoRepository = getManager().getRepository(User_Student);
+      const stu = await stuBasicInfoRepository.findOneBy({studentNo: ctx.state.user.id});
+      console.log(ctx.request.body)
+      if(stu){
+        const evaluateRepository = getManager().getRepository(Evaluate);
+        // const meEvaluated = await evaluateRepository.delete({ evaluateName: stu.name, 
+        //                       evaluatedName: ctx.request.body.evaluatedName,tag: ctx.request.body.tag,
+        //                       content: ctx.request.body.content});
+        const meEvaluated = await evaluateRepository.delete({evaluateNo: ctx.request.body.evaluateNo})
+        ctx.status = 200;
+        ctx.body = {
+          code: 1,
+        };
+      }
+
+    }
+
     //查找我评价过的
     public static async meEvaluated(ctx: Context) {
         await Auth.Verify(ctx);

@@ -11,7 +11,7 @@ export default class SocialPrcController {
     public static async listSocialPrc(ctx: Context) {
       const socialPrcRepository = getManager().getRepository(Social_Prc);
       //加载带有user_student的socia_prc
-      const social_prcs = await socialPrcRepository.find();
+      const social_prcs = await socialPrcRepository.findBy({ department: ctx.request.body.dpt, grade: ctx.request.body.grade});
   
       ctx.status = 200;
       ctx.body = {

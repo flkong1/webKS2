@@ -6,8 +6,10 @@
   "password": "pass",
   "database": "koa",
   "synchronize": true,
+  
   "entities": ["src/entity/*.ts"],
   "cli": {
     "entitiesDir": "src/entity"
   }
+  
 }

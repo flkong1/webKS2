@@ -1,6 +1,6 @@
 import Koa from 'koa';
 import cors from '@koa/cors';
-import bodyParser from 'koa-bodyparser';
+// import bodyParser from 'koa-bodyparser';
 import { protectedRouter, unprotectedRouter } from './routes';
 import { JWT_SECRET } from './constants';
 import logger from './logger';
@@ -45,9 +45,6 @@ createConnection()
     // 注册中间件
     app.use(logger());
     app.use(cors());
-    
-
-
 
     // 错误处理中间件
     app.use(async (ctx, next) => {

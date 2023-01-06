@@ -11,7 +11,7 @@ export default class AchievementController {
       public static async listAchieve(ctx: Context) {
         const achieveRepository = getManager().getRepository(Achievement);
         //加载带有user_student的socia_prc
-        const achieves = await achieveRepository.find();
+        const achieves = await achieveRepository.findBy({ department: ctx.request.body.dpt, grade: ctx.request.body.grade});
     
         ctx.status = 200;
         ctx.body = {

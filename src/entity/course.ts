@@ -13,7 +13,9 @@ export class Course {
   @Column()
   teacherName: string;
 
-  @Column()
+  @Column({
+    type: "double",
+  })
   credit: number;
 
   //学时

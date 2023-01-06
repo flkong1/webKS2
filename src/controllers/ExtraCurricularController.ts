@@ -12,7 +12,7 @@ export default class ExtraCurricularController {
     //展示表中所有信息
       public static async listExCurricular(ctx: Context) {
         const exCurricularRepository = getManager().getRepository(Extracurricular);
-        const exCurriculars = await exCurricularRepository.find();
+        const exCurriculars = await exCurricularRepository.findBy({ department: ctx.request.body.dpt, grade: ctx.request.body.grade});
         console.log(exCurriculars)
         ctx.status = 200;
         ctx.body = {

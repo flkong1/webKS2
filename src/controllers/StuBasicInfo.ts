@@ -79,6 +79,7 @@ export default class StuBasicInfoController {
             newStu.department = ctx.request.body.department;
             newStu.status = ctx.request.body.status;
             newStu.class = ctx.request.body.class;
+            // newStu.GPA = 0;
             console.log(newStu.user)
             const nstu = await stuBasicInfoRepository.save(newStu);
     

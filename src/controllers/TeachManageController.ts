@@ -15,7 +15,7 @@ export default class TeachManageController {
   public static async showTeachManage(ctx: Context) {
     await Auth.Verify(ctx);
     const teacherRepository = getManager().getRepository(User_Teacher);
-    const teacherInfo = await teacherRepository.findOneBy({ teacherNo: ctx.state.user.id })
+    const teacherInfo = await teacherRepository.findOneBy({ teacherNo: ctx.request.body.id })
     //必须是“findOneBy”这样才是只查一个，不然得到的就是数组类型下面无法“.name”，同时建表时就需要教师名字不重复
     if (teacherInfo) {
       const courseRepository = getManager().getRepository(Course);
@@ -48,19 +48,12 @@ export default class TeachManageController {
   //教师端查询教学课程
   public static async showCourse(ctx: Context) {
     await Auth.Verify(ctx);
-    //console.log(ctx.request.body.term)
     const teacherRepository = getManager().getRepository(User_Teacher);
     const teacherInfo = await teacherRepository.findOneBy({ teacherNo: ctx.state.user.id })
     if (teacherInfo) {
-      //console.log(teacherInfo.name)
       const courseRepository = getManager().getRepository(Course);
       const courses = await courseRepository.findBy({ teacherName: teacherInfo.name, term: ctx.request.body.term })
-      // const course1 = await courseRepository.findBy({ teacherName: teacherInfo.name });
-      // const course2 = await courseRepository.findBy({ term: ctx.request.body.term })
-      // console.log("1111"+course1)
-      // console.log("2222"+course2)
       if (courses) {
-
         ctx.status = 200;
         ctx.body = {
           code: 1,
@@ -86,9 +79,10 @@ export default class TeachManageController {
   public static async showTeachCourse(ctx: Context) {
     await Auth.Verify(ctx);
     const teacherRepository = getManager().getRepository(User_Teacher);
-    const teacherInfo = await teacherRepository.findOneBy({ teacherNo: ctx.state.user.id })
+    const teacherInfo = await teacherRepository.findOneBy({ teacherNo: ctx.state.user.id })//
     //必须是“findOneBy”这样才是只查一个，不然得到的就是数组类型下面无法“.name”，同时建表时就需要教师名字不重复
     if (teacherInfo) {
+      //console.log(ctx.request.body.id)
       //课程名应该是前端返回的，选了才会出现
       const courseRepository = getManager().getRepository(Course);
       const courseInfo = await courseRepository.findOneBy({ courseName: ctx.request.body.courseName, teacherName: teacherInfo.name });//返回的是名字还是学号？
@@ -97,11 +91,11 @@ export default class TeachManageController {
 
         const scoreRepository = getManager().getRepository(SelectRecord);
         const scoreInfo = await scoreRepository.findBy({ course: courseInfo })
-        console.log(scoreInfo)
+        //console.log(scoreInfo)
         //还有“标签”的属性 //查到的应该是整个学生的信息吧
 
         if (scoreInfo) {
-          console.log(scoreInfo)
+          //console.log(scoreInfo)
           ctx.status = 200;
           ctx.body = {
             code: 1,
@@ -131,45 +125,56 @@ export default class TeachManageController {
   }
 
   //教师端添加学生成绩信息+标签信息
-  public static async addStudentScore(ctx: Context) {
+  public static async updateStudentScore(ctx: Context) {
     await Auth.Verify(ctx);
-    const teacherRepository = getManager().getRepository(User_Teacher);
-    const teacherInfo = await teacherRepository.findOneBy({ teacherNo: ctx.state.user.id })
+    
+    const arr = ctx.request.body.scoreList;
+    console.log(ctx.request.body.scoreList)
+    arr.forEach(async (element: any) => {
+      const studentNo = element.studentNo;
+      const score = element.score;
 
-    if (teacherInfo) {
-      const studentRepository = getManager().getRepository(User_Student);
-      const student = await studentRepository.findOneBy({ studentNo: ctx.request.body.studentNo });
-      const courseRepository = getManager().getRepository(Course);
-      const course = await courseRepository.findOneBy({ courseName: ctx.request.body.courseName, teacherName: teacherInfo.name });
+      const teacherRepository = getManager().getRepository(User_Teacher);
+      const teacherInfo = await teacherRepository.findOneBy({ teacherNo: ctx.state.user.id })
 
-      if (student && course) {
-        const newRecord = new SelectRecord();
-        newRecord.student = student;
-        newRecord.course = course;
-        newRecord.score = ctx.request.body.score;
-        newRecord.label = ctx.request.body.label;
-        const recordRepository = getManager().getRepository(SelectRecord);
-        const record = await recordRepository.save(newRecord);
+      if (teacherInfo) {
+        const studentRepository = getManager().getRepository(User_Student);
+        const student = await studentRepository.findOneBy({ studentNo: studentNo });
+        const courseRepository = getManager().getRepository(Course);
+        const course = await courseRepository.findOneBy({ courseName: ctx.request.body.courseName, teacherName: teacherInfo.name });
 
-        console.log(newRecord);
-        ctx.status = 200;
-        ctx.body = {
-          code: 1,
+        if (student && course) {
+          const recordRepository = getManager().getRepository(SelectRecord);
+          let newRecord = await recordRepository.findOneBy({ student: student, course: course })
+          if (newRecord) {
+            newRecord.score = score;
+            await recordRepository.save(newRecord);
+            ctx.status = 200;
+            ctx.body = {
+              code: 1,
+            }
+          } else {
+            ctx.status = 200;
+            ctx.body = {
+              code: -1,
+              msg: '选课记录不存在'
+            };
+          }
+        } else {
+          ctx.status = 200;
+          ctx.body = {
+            code: -1,
+            msg: '课程或学生不存在'
+          };
         }
       } else {
         ctx.status = 200;
         ctx.body = {
           code: -1,
-          msg: '课程或学生不存在'
+          msg: '教师不存在'
         };
       }
-    } else {
-      ctx.status = 200;
-      ctx.body = {
-        code: -1,
-        msg: '教师不存在'
-      };
-    }
+    });
   }
 
   // //教师端提交学生成绩
