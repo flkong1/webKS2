@@ -19,7 +19,7 @@ export default class StuBasicInfoController {
           }
         };
 
-      }
+    }
   //用户端展示自己的信息(需要在url中传入studentNo或user)
       public static async showStuBasicInfoDetail(ctx: Context) {
         console.log('entered')

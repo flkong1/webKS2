@@ -66,7 +66,6 @@ export default class SocialPrcController {
 
         const prc = await socialPrcRepository.save(newPrc);
         console.log('社会实践经历添加成功')
-        console.log(newPrc.user_student)
 
         ctx.status = 200;
         ctx.body = {

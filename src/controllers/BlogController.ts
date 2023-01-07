@@ -24,6 +24,17 @@ export default class BlogController {
         };
     }
 
+    public static async updateBlog(ctx: Context) {
+      const blogRepository = getManager().getRepository(Blog);
+      await blogRepository.update(ctx.request.body.blogNo, ctx.request.body);
+      ctx.status = 200;
+      ctx.body = {
+        code: 1,
+        
+      };
+
+    }
+
     public static async deleteBlog(ctx: Context) {
         await Auth.Verify(ctx);
         const blogRepository = getManager().getRepository(Blog);

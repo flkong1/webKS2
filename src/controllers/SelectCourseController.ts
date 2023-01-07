@@ -44,7 +44,11 @@ export default class SelectCourseController {
     const student = await studentRepository.findOneBy({ studentNo: ctx.state.user.id });
     const courseRepository = getManager().getRepository(Course);
     const course = await courseRepository.findOneBy({ courseNo: ctx.request.body.courseNo });
-    if ((course?.selectedStu && course?.totalStu) && (course?.selectedStu < course?.totalStu)) {
+    var selectedStu=0;
+    var totalStu=0;
+    if(course?.selectedStu) selectedStu = course.selectedStu;
+    if(course?.totalStu) totalStu = course.totalStu;
+    if (selectedStu < totalStu) {
       if (student && course) {
         const recordRepository = getManager().getRepository(SelectRecord);
         const rec = await recordRepository.findOneBy({ student: student, course: course });

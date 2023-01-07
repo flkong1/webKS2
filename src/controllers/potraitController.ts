@@ -25,6 +25,8 @@ export default class PortraitController {
         if(stuBasicInfo){
           const selectRepository = getManager().getRepository(SelectRecord);
           const course = await selectRepository.findBy({student: stuBasicInfo});
+          var gpa = 0;
+          if(course[0].score) gpa = course[0].score/10-5;
           const evaluateRepository = getManager().getRepository(Evaluate);
           const evaluateMe = await evaluateRepository.findBy({ evaluatedName: stuBasicInfo.name });
           console.log(evaluateMe)
@@ -36,6 +38,7 @@ export default class PortraitController {
               exCurricular,
               achieve,
               course,
+              gpa,
               evaluateMe,
             }
           };

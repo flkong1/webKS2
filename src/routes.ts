@@ -25,27 +25,26 @@ import TeachManageController from './controllers/TeachManageController';
 const unprotectedRouter = new Router();
 
 unprotectedRouter.post('/auth/login/user', AuthController.loginUser);
-unprotectedRouter.post('/auth/login/logout', AuthController.logout);
+// unprotectedRouter.post('/auth/login/logout', AuthController.logout);
 unprotectedRouter.get('/auth/login/yzm', AuthController.loginYzm);
-unprotectedRouter.post('/auth/login/forgot', AuthController.forgotPass);
 unprotectedRouter.post('/auth/register', AuthController.register);
-// unprotectedRouter.post('/stuAdmin/insertStudent', StudentAdminController.insertStudent);
+unprotectedRouter.post('/users/resetPwd',AuthController.resetPwd);  //忘记密码
+unprotectedRouter.post('/pwd/changePwd',UserController.changePwd);  //登录状态改密码
 unprotectedRouter.get('/dpt/getDptName', DeptController.getDeptName);
-// unprotectedRouter.get('stuAdmin/getStuData', StudentAdminController.getStuData);
 
 const protectedRouter = new Router();
 
 //跟账号相关
-unprotectedRouter.get('/users', UserController.listUsers);
-unprotectedRouter.get('/users/:name', UserController.showUserDetail);
-unprotectedRouter.post('/users/add',AuthController.register);
-unprotectedRouter.post('/users/resetPwd',AuthController.resetPwd);
-unprotectedRouter.put('/users/:name', UserController.updateUser);
-unprotectedRouter.delete('/users/:name', UserController.deleteUser);
-unprotectedRouter.post('/pwd/changePwd',UserController.changePwd);
+// unprotectedRouter.get('/users', UserController.listUsers);
+// unprotectedRouter.get('/users/:name', UserController.showUserDetail);
+// unprotectedRouter.post('/users/add',AuthController.register);
+// unprotectedRouter.put('/users/:name', UserController.updateUser);
+// unprotectedRouter.delete('/users/:name', UserController.deleteUser);
+
 
 //邮箱验证码
 unprotectedRouter.post('/sendEmail',EmailController.getEmailCode );
+unprotectedRouter.post('/checkEmailCode',EmailController.checkEmailCode );
 
 //开课
 unprotectedRouter.post('/course/listCourse',CourseController.listCourse);
@@ -78,6 +77,7 @@ unprotectedRouter.post('/stuBasicInfo/delete',StuBasicInfoController.deleteStuBa
 //教师基本信息
 unprotectedRouter.post('/teaBasicInfo/getInfoTable', TeaBasicInfoController.listTeaBasicInfo);
 unprotectedRouter.post('/teaBasicInfo/getInfo',TeaBasicInfoController.showTeaBasicInfoDetail);
+unprotectedRouter.post('/teaBasicInfo/changePartInfo',TeaBasicInfoController.changeInfo);
 unprotectedRouter.post('/teaBasicInfo/add',TeaBasicInfoController.addTeaBasicInfo);
 unprotectedRouter.post('/teaBasicInfo/update',TeaBasicInfoController.updateTeaBasicInfo);
 unprotectedRouter.post('/teaBasicInfo/delete',TeaBasicInfoController.deleteTeaBasicInfo);

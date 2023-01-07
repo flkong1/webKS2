@@ -64,18 +64,7 @@ export default class CourseController {
       };
 
     } else {
-      const crsArea = await courseRepository.findBy({
-        day: ctx.request.body.day, time: ctx.request.body.time,
-        term: ctx.request.body.term, area: ctx.request.body.area, room: ctx.request.body.room
-      });
-      if (crsArea) {
-        ctx.status = 200;
-        ctx.body = {
-          code: -1,
-          msg: '开课教室重复，请选择其他教室'
-        };
-      } else {
-        console.log(ctx.request.body);
+        // console.log(ctx.request.body);
         const newCourse = new Course();
         newCourse.courseNo = ctx.request.body.courseNo;
         newCourse.courseName = ctx.request.body.courseName;
@@ -87,7 +76,7 @@ export default class CourseController {
         newCourse.grade = ctx.request.body.grade;
         newCourse.term = ctx.request.body.term;
         newCourse.totalStu = ctx.request.body.totalStu;
-        newCourse.selectedStu = 1;
+        newCourse.selectedStu = 0;
         newCourse.area = ctx.request.body.area;
         newCourse.room = ctx.request.body.room;
         newCourse.day = ctx.request.body.day;
@@ -103,7 +92,7 @@ export default class CourseController {
       }
     }
 
-  }
+  
 
   //管理员段修改开课信息
   public static async updateCourse(ctx: Context) {

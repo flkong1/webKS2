@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-import { getManager } from 'typeorm';
+import { getConnection, getManager } from 'typeorm';
 import { UnauthorizedException } from '../exceptions';
 import jwt from 'jsonwebtoken';
 import svgCaptcha from 'svg-captcha';
@@ -79,6 +79,25 @@ export default class TeaBasicInfoController {
             msg:'用户不存在',
           }
         }
+      }
+
+      public static async changeInfo(ctx: Context) {
+        await Auth.Verify(ctx)
+        await getConnection()
+        .createQueryBuilder()
+        .update(User_Teacher)
+        .set({direction: ctx.request.body.direction, 
+          teaCourse: ctx.request.body.teaCourse,
+          book: ctx.request.body.book})
+        .where("teacherNo = :teacherNo",{teacherNo: ctx.state.user.id})
+        .execute();
+        ctx.status = 200;
+        ctx.body = {
+          code: 1,
+        };
+
+
+
       }
 
       //管理员端增加教师基本信息
